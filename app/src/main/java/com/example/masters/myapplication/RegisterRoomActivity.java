@@ -40,6 +40,7 @@ public class RegisterRoomActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                CallWebservice();
 
                 String description = Description.getText().toString();
                 if (description.length() != 0) {
@@ -49,7 +50,6 @@ public class RegisterRoomActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int id) {
 
                             show.setText(Description.getText());
-
                             CallWebservice();
                             Toast.makeText(getApplicationContext(),
                                     "สร้างห้องเรียบร้อย", Toast.LENGTH_SHORT).show();
@@ -111,14 +111,14 @@ public class RegisterRoomActivity extends AppCompatActivity {
         Toast.makeText(RegisterRoomActivity.this,"a",Toast.LENGTH_SHORT).show();
         //ShowMsg(strCardID);
 
-        //ID_Room
-        String ID_Room = "123456";
-        pi=new PropertyInfo();
-        pi.setName("ID_Room");
-        pi.setValue(ID_Room);
-        pi.setType(String.class);
-        request.addProperty(pi);
-        Toast.makeText(RegisterRoomActivity.this,"b",Toast.LENGTH_SHORT).show();
+//        //ID_Room
+//        String ID_Room = "123456";
+//        pi=new PropertyInfo();
+//        pi.setName("ID_Room");
+//        pi.setValue(ID_Room);
+//        pi.setType(String.class);
+//        request.addProperty(pi);
+//        Toast.makeText(RegisterRoomActivity.this,"b",Toast.LENGTH_SHORT).show();
         //ShowMsg(ID_Room);
 
         //Description
@@ -153,8 +153,7 @@ public class RegisterRoomActivity extends AppCompatActivity {
 
 //        logMsg(strResponse);
         Toast.makeText(RegisterRoomActivity.this,"OOOOO",Toast.LENGTH_SHORT).show();
-
-//        Toast.makeText(RegisterRoomActivity.this,strResponse, Toast.LENGTH_SHORT).show();
+        Toast.makeText(RegisterRoomActivity.this,strResponse, Toast.LENGTH_SHORT).show();
 
         return strResponse;
 
