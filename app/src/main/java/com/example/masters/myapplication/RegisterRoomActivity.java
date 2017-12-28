@@ -1,21 +1,20 @@
 package com.example.masters.myapplication;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.EventLogTags;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import javax.security.auth.login.LoginException;
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.PropertyInfo;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.HttpTransportSE;
 
 public class RegisterRoomActivity extends AppCompatActivity {
 
@@ -24,6 +23,7 @@ public class RegisterRoomActivity extends AppCompatActivity {
     Button submit;
     TextView show;
 
+    private String ID_Cus = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +47,10 @@ public class RegisterRoomActivity extends AppCompatActivity {
                     builder.setMessage("ยืนยันการสร้างห้อง");
                     builder.setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-//                            show.setText(Description.getText());
-                            CallWebservice(show.toString(),Description.toString());
+
+                            show.setText(Description.getText());
+
+                            CallWebservice();
                             Toast.makeText(getApplicationContext(),
                                     "สร้างห้องเรียบร้อย", Toast.LENGTH_SHORT).show();
                         }
@@ -80,12 +82,83 @@ public class RegisterRoomActivity extends AppCompatActivity {
 
     }
 
-    private void CallWebservice(String name , String description) {
+    private String CallWebservice() {
 
-        String name  = show;
-        String description = Description;
+        String name  = show.toString();
+        String description = Description.toString();
+//        ID_Cus = show.toString() ;
 
-        
+        int cnt = 0;
+        String strResponse="";
+
+        String URL =  "http://203.151.213.80/webservice/WebService1.asmx";
+        String NAMESPACE = "http://tempuri.org/";
+        String METHOD_NAME = "Register_Room";
+        String SOAP_ACTION = "http://tempuri.org/Register_Room";
+        SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
+
+        /**** with parameter *****/
+        PropertyInfo pi;
+
+
+        //CID
+        String CustomerID = name;
+        pi=new PropertyInfo();
+        pi.setName("Customer_ID");
+        pi.setValue(CustomerID);
+        pi.setType(String.class);
+        request.addProperty(pi);
+        Toast.makeText(RegisterRoomActivity.this,"a",Toast.LENGTH_SHORT).show();
+        //ShowMsg(strCardID);
+
+        //ID_Room
+        String ID_Room = "123456";
+        pi=new PropertyInfo();
+        pi.setName("ID_Room");
+        pi.setValue(ID_Room);
+        pi.setType(String.class);
+        request.addProperty(pi);
+        Toast.makeText(RegisterRoomActivity.this,"b",Toast.LENGTH_SHORT).show();
+        //ShowMsg(ID_Room);
+
+        //Description
+        String Description = description;
+        pi=new PropertyInfo();
+        pi.setName("Description");
+        pi.setValue(Description);
+        pi.setType(String.class);
+        request.addProperty(pi);
+        Toast.makeText(RegisterRoomActivity.this,"c",Toast.LENGTH_SHORT).show();
+        //ShowMsg(Name_Title_TH);
+
+        /*************************/
+
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(request);
+        HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+        androidHttpTransport.debug = true;
+        try
+        {
+            androidHttpTransport.call(SOAP_ACTION, envelope);
+            SoapObject response;
+            response= (SoapObject) envelope.bodyIn;
+            strResponse = response.getProperty(0).toString();
+        }
+        catch (Exception e)
+        {
+            //e.printStackTrace();
+            strResponse = e.toString();
+        }
+
+//        logMsg(strResponse);
+        Toast.makeText(RegisterRoomActivity.this,"OOOOO",Toast.LENGTH_SHORT).show();
+
+//        Toast.makeText(RegisterRoomActivity.this,strResponse, Toast.LENGTH_SHORT).show();
+
+        return strResponse;
+
+
     }
 }
 
